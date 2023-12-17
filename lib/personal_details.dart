@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lung_cancer_detection/analysis.dart';
 
 class PersonalDetails extends StatefulWidget {
   const PersonalDetails({super.key});
@@ -188,14 +189,29 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                       ],
                     ),
                     const SizedBox(height: 32.0),
-                    SizedBox(
+                    Container(
                         width: double.infinity,
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: Text("Start"),
-                            )))
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        ),
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Analysis()),
+                              );
+                            },
+                            child: const Text(
+                              "Start",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ))),
                   ])),
         ]),
       ),
