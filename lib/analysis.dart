@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lung_cancer_detection/image_request.dart';
 
 class Analysis extends StatelessWidget {
   const Analysis({super.key});
@@ -27,7 +28,11 @@ class Analysis extends StatelessWidget {
                   ),
                   child: TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ImageRequest()),
+                        );
                       },
                       child: const Text(
                         "Get analysis",
