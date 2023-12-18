@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lung_cancer_detection/analyze.service.dart';
 
 class ImageRequest extends StatefulWidget {
   const ImageRequest({super.key});
@@ -14,8 +18,14 @@ class _ImageRequestState extends State<ImageRequest> {
   Future<void> _pickImage(ImageSource source) async {
     try {
       final pickedFile = await _picker.pickImage(source: source);
-
       if (pickedFile != null) {
+        File image = File(pickedFile.path);
+        StreamedResponse response = await Analyze.analyzeImage(image.path);
+        if (response.statusCode == 200) {
+          debugPrint(await response.stream.bytesToString());
+        } else {
+          debugPrint(response.reasonPhrase);
+        }
       } else {}
     } catch (e) {
       debugPrint('$e');
@@ -28,12 +38,16 @@ class _ImageRequestState extends State<ImageRequest> {
         source: ImageSource.camera,
         preferredCameraDevice: CameraDevice.rear,
       );
-
-      setState(() {
-        if (pickedFile != null) {
-          final _imageFile = pickedFile;
-        } else {}
-      });
+      if (pickedFile != null) {
+        debugPrint(pickedFile.path);
+        StreamedResponse response =
+            Analyze.analyzeImage(pickedFile.path) as StreamedResponse;
+        if (response.statusCode == 200) {
+          debugPrint(await response.stream.bytesToString());
+        } else {
+          debugPrint(response.reasonPhrase);
+        }
+      } else {}
     } catch (e) {
       debugPrint('$e');
     }
