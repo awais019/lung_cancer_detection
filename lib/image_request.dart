@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lung_cancer_detection/analyze.service.dart';
+import 'package:lung_cancer_detection/result.dart';
 
 class ImageRequest extends StatefulWidget {
   const ImageRequest({super.key});
@@ -22,7 +24,18 @@ class _ImageRequestState extends State<ImageRequest> {
         File image = File(pickedFile.path);
         StreamedResponse response = await Analyze.analyzeImage(image.path);
         if (response.statusCode == 200) {
-          debugPrint(await response.stream.bytesToString());
+          Map<String, dynamic> data =
+              jsonDecode(await response.stream.bytesToString())
+                  as Map<String, dynamic>;
+          if (mounted) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Result(
+                          result: data['detection'],
+                          image: image,
+                        )));
+          }
         } else {
           debugPrint(response.reasonPhrase);
         }
